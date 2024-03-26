@@ -7,22 +7,19 @@ import {
 } from '@angular/fire/auth';
 
 import { User } from '@angular/fire/auth';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  user$: Observable<any>;
+  private userSubject: BehaviorSubject<User | null> =
+    new BehaviorSubject<User | null>(null);
+  user$: Observable<any> = this.userSubject.asObservable();
+
   constructor(private auth: Auth) {
-    this.user$ = new Observable((subscriber) => {
-      this.auth.onAuthStateChanged((user) => {
-        if (user) {
-          subscriber.next(user);
-        } else {
-          subscriber.next(null);
-        }
-      });
+    this.auth.onAuthStateChanged((user) => {
+      this.userSubject.next(user);
     });
   }
 
@@ -46,10 +43,6 @@ export class AuthService {
   }
 
   async logOut() {
-    try {
-      await signOut(this.auth);
-    } catch (err) {
-      console.log(err);
-    }
+    await signOut(this.auth);
   }
 }

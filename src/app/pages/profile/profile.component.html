@@ -1,0 +1,20 @@
+
+
+  <div class="card" style="width: 18rem;">
+    <img [src]="photoUrl" class="card-img-top" >
+    <!-- https://i0.wp.com/digitalhealthskills.com/wp-content/uploads/2022/11/3da39-no-user-image-icon-27.png -->
+    <div class="card-body">
+ 
+  <h5 class="card-title">{{displayName || "Vous n\'avez pas entré votre nom"}}</h5>
+     
+    </div>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item">Email:  {{email}}</li>
+      <li class="list-group-item">Phone: {{phoneNumber || 'n\'existe pas'}}</li>
+      <!-- <li class="list-group-item">A third item</li> -->
+    </ul>
+    <div class="card-body">
+      <!-- <a href="#" class="card-link">Card link</a>
+      <a href="#" class="card-link">Another link</a> -->
+    </div>
+  </div>

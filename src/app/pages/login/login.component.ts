@@ -29,8 +29,8 @@ export class LoginComponent implements OnInit {
       this.authService
         .login(this.authForm.value.email, this.authForm.value.password)
         .then((response) => {
-          console.log(response);
           if (!response) console.log('Login failed');
+          this.router.navigate(['/home/profile']);
         });
     } catch (err: any) {
       const errorCode = err.code;

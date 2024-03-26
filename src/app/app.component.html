@@ -6,17 +6,22 @@
       <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
         <a class="navbar-brand" routerLink="" routerLinkActive="active">Acceuil</a>
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-       
-          <li class="nav-item">
-            <a class="nav-link" routerLink="/auth/login" routerLinkActive="active">Se connecter</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" routerLink="/auth/register" routerLinkActive="active">S'inscrire</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" routerLink="/auth/register" routerLinkActive="active">Deconnecter</a>
-          </li>
-        </ul>
+       <ng-container *ngIf="isLoggedIn$|async; else loginBlock">
+
+        <li class="nav-item">
+          <button class="nav-link" (click)="logout()">Deconnecter</button>
+        </li>
+       </ng-container>
+       <ng-template #loginBlock>
+
+           <li class="nav-item">
+             <a class="nav-link" routerLink="/auth/login" routerLinkActive="active">Se connecter</a>
+           </li>
+           <li class="nav-item">
+             <a class="nav-link" routerLink="/auth/register" routerLinkActive="active">S'inscrire</a>
+           </li>
+        </ng-template>
+    </ul>
         <form class="d-flex">
           <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
           <button class="btn btn-outline-success" type="submit">Search</button>
