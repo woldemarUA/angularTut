@@ -1,0 +1,28 @@
+<div class="container">
+    <form [formGroup]="authForm" (ngSubmit)="isLogin?login():register()" >
+
+      <div class ="form-floating mb-1">
+        <input id="email" class="form-control "  formControlName="email" type="email"/>
+        <label for="email">Votre email</label>
+        <div *ngIf="authForm.controls['email'].invalid && authForm.controls['email'].touched">
+        
+            <small class="error " *ngIf="authForm.get('email')?.errors?.['required']">Email is required.</small>
+            <small class="error" *ngIf="authForm.get('email')?.errors?.['email']">Please enter a valid email address.</small>
+        </div>
+    
+      </div>
+
+     <div class="form-floating mb-1">
+        <input id="password" class="form-control "  formControlName="password" type="password"/>
+        <label for="password">Votre mot de pass</label>
+          <div *ngIf="authForm.controls['password'].invalid && authForm.controls['password'].touched">
+            <small class="error " *ngIf="authForm.get('password')?.errors?.['required']">password is required.</small>
+            <small class="error" *ngIf="authForm.get('password')?.errors?.['password']">Please enter a valid password .</small>
+        </div>
+     </div>
+    
+      <button class="btn btn-primary btn-sm" type="submit" [disabled]="!authForm.valid">{{isLogin?'Se connecter':'S\'inscrire'}}</button>
+    </form>
+</div>
+  
+

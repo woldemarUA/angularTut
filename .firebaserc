@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "angular-auth-7b780": {
+      "hosting": {
+        "auth": [
+          "angular-auth-7b780"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "angular-auth-7b780"
+  }
+}
