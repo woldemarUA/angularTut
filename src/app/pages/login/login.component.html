@@ -23,6 +23,13 @@
     
       <button class="btn btn-primary btn-sm" type="submit" [disabled]="!authForm.valid">{{isLogin?'Se connecter':'S\'inscrire'}}</button>
     </form>
+<div class="my-2">
+
+  <button (click)="loginWithGoogle()" class="btn btn-success btn-sm">Sign in with Google</button>
+
+</div>
+
+ 
 </div>
   
 

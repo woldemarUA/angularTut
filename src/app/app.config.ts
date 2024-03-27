@@ -4,6 +4,10 @@ import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 
+import { getStorage, provideStorage } from '@angular/fire/storage';
+
+import { getDatabase, provideDatabase } from '@angular/fire/database';
+
 import { firebaseConfig } from '../environments/environment';
 
 import { routes } from './app.routes';
@@ -19,6 +23,8 @@ export const appConfig: ApplicationConfig = {
       provideFirebaseApp(() => initializeApp(firebaseConfig)),
       provideFirestore(() => getFirestore()),
       provideAuth(() => getAuth()),
+      provideStorage(() => getStorage()),
+      provideDatabase(() => getDatabase()),
     ]),
   ],
 };

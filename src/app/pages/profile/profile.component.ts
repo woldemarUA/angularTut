@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../service/auth.service';
+import { StorageService } from '../../service/storage.service';
 
 @Component({
   selector: 'app-profile',
@@ -14,7 +15,10 @@ export class ProfileComponent implements OnInit {
   phoneNumber: string = null;
   photoUrl: string = null;
 
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private storageService: StorageService
+  ) {}
 
   ngOnInit(): void {
     this.authService.user$.subscribe((user) => {

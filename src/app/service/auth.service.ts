@@ -3,6 +3,8 @@ import {
   Auth,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
+  signInWithPopup,
+  GoogleAuthProvider,
   signOut,
 } from '@angular/fire/auth';
 
@@ -32,7 +34,12 @@ export class AuthService {
 
     return userCredential.user;
   }
-
+  async loginWithGoogle() {
+    const provider = new GoogleAuthProvider();
+    const userCredential = await signInWithPopup(this.auth, provider);
+    console.log(userCredential.user);
+    return userCredential.user;
+  }
   async register(email: string, password: string) {
     const response = await createUserWithEmailAndPassword(
       this.auth,

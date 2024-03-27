@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { AuthService } from '../../service/auth.service';
+import { response } from 'express';
 
 @Component({
   selector: 'app-login',
@@ -37,6 +38,16 @@ export class LoginComponent implements OnInit {
       const errorMessage = err.message;
       console.log(errorCode);
       console.log(errorMessage);
+    }
+  }
+  async loginWithGoogle() {
+    try {
+      this.authService.loginWithGoogle().then((response) => {
+        if (!response) console.log('Login with gooogle failed');
+        this.router.navigate(['home/profile']);
+      });
+    } catch (err) {
+      console.error(err);
     }
   }
 
