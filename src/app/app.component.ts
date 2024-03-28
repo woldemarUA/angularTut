@@ -8,7 +8,10 @@ import {
 } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from './service/auth.service';
+import { ToastContainerComponent } from './pages/toast-container/toast-container.component';
 import { Observable, map } from 'rxjs';
+import { ToastService } from './service/toast.service';
+
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -18,6 +21,7 @@ import { Observable, map } from 'rxjs';
     RouterLinkActive,
     ReactiveFormsModule,
     CommonModule,
+    ToastContainerComponent,
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
@@ -27,14 +31,20 @@ export class AppComponent {
   title = 'auth';
   isLoggedIn$: Observable<boolean>;
 
-  constructor(private authService: AuthService, private router: Router) {
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private toastService: ToastService
+  ) {
     this.isLoggedIn$ = this.authService.user$.pipe(map((user) => !!user));
   }
 
   async logout(): Promise<any> {
-    this.authService.logOut().then((res) => {
+    try {
+      await this.authService.logOut();
       this.router.navigate(['/']);
-    });
+      this.toastService.showSuccess('Vous etez deconnecté avec success');
+    } catch (err) {}
   }
   // ngOnInit(): void {
   //   this.authService.user$.subscribe((user) => {

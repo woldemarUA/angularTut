@@ -19,11 +19,7 @@ export class StorageService {
     private authService: AuthService
   ) {}
 
-  async uploadFile(
-    file: File,
-    fileName: string,
-    userProfile: boolean = false
-  ): Promise<string> {
+  async uploadFile(file: File, fileName: string): Promise<string> {
     // this approach to use this function as file upload serivce with userprofile flag it is true we update userprofile
     const storageRef = ref(this.storage, fileName);
     const uploadTask = uploadBytesResumable(storageRef, file);
@@ -31,15 +27,6 @@ export class StorageService {
     try {
       const snapshot = await uploadTask;
       const downloadUrl = await getDownloadURL(snapshot.ref);
-      console.log(`file available at : ${downloadUrl}`);
-
-      if (userProfile) {
-        const user = await firstValueFrom(this.authService.user$);
-        if (user) {
-          await user.updateProfile({ photoURL: downloadUrl });
-          console.log('UserProfile photo was updated');
-        }
-      }
 
       return downloadUrl;
     } catch (err) {

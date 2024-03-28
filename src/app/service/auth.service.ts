@@ -6,6 +6,11 @@ import {
   signInWithPopup,
   GoogleAuthProvider,
   signOut,
+  updateProfile,
+  reauthenticateWithCredential,
+  EmailAuthProvider,
+  updatePassword,
+  // updatePhoneNumber,
 } from '@angular/fire/auth';
 
 import { User } from '@angular/fire/auth';
@@ -26,27 +31,84 @@ export class AuthService {
   }
 
   async login(email: string, password: string): Promise<User | null> {
-    const userCredential = await signInWithEmailAndPassword(
-      this.auth,
-      email,
-      password
-    );
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        this.auth,
+        email,
+        password
+      );
 
-    return userCredential.user;
+      return userCredential.user;
+    } catch (err) {
+      //   // Assuming displayError is a method that displays the error message to the user
+      // this.displayError('Login failed. Please check your email and password.');
+      throw err;
+    }
   }
   async loginWithGoogle() {
-    const provider = new GoogleAuthProvider();
-    const userCredential = await signInWithPopup(this.auth, provider);
-    console.log(userCredential.user);
-    return userCredential.user;
+    try {
+      const provider = new GoogleAuthProvider();
+      const userCredential = await signInWithPopup(this.auth, provider);
+
+      return userCredential.user;
+    } catch (err) {
+      //   // Assuming displayError is a method that displays the error message to the user
+      // this.displayError('Login failed. Please check your email and password.');
+      throw err;
+    }
+  }
+
+  async updateUserPassword(oldPassword: string, newPassword: string) {
+    if (!this.auth.currentUser) {
+      throw new Error('No user logged in.');
+    }
+    try {
+      const credential = EmailAuthProvider.credential(
+        this.auth.currentUser.email,
+        oldPassword
+      );
+      await reauthenticateWithCredential(this.auth.currentUser, credential);
+      const result = await updatePassword(this.auth.currentUser, newPassword);
+    } catch (err) {
+      //   // Assuming displayError is a method that displays the error message to the user
+      // this.displayError('Login failed. Please check your email and password.');
+      throw err;
+    }
   }
   async register(email: string, password: string) {
-    const response = await createUserWithEmailAndPassword(
-      this.auth,
-      email,
-      password
-    );
-    return response;
+    try {
+      const response = await createUserWithEmailAndPassword(
+        this.auth,
+        email,
+        password
+      );
+      return response;
+    } catch (err) {
+      //   // Assuming displayError is a method that displays the error message to the user
+      // this.displayError('Login failed. Please check your email and password.');
+      throw err;
+    }
+  }
+
+  refreshUserData() {
+    this.auth.currentUser.reload().then(() => {
+      this.userSubject.next(this.auth.currentUser);
+    });
+  }
+
+  async updateUserProfile(userData: Partial<User>): Promise<void> {
+    if (this.auth.currentUser) {
+      try {
+        await updateProfile(this.auth.currentUser, userData);
+
+        const refreshedUser = await this.auth.currentUser.reload();
+        this.userSubject.next(this.auth.currentUser);
+
+        // method that displays the  message to the user
+      } catch (err) {
+        throw err;
+      }
+    }
   }
 
   async logOut() {

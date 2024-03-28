@@ -1,20 +1,118 @@
+<!-- <app-toast-container></app-toast-container> -->
+<div class="card">
+  <div class="border mb-2">
+    <img [src]="photoUrl" class="card-img-top" />
+    <button
+      class="btn btn-outline-danger btn-sm"
+      (click)="triggerFileInputClick()"
+    >
+      Editer
+    </button>
+    <app-file-upload
+      #fileUpload
+      style="display: none"
+      (fileUploaded)="updateProfilePhoto($event)"
+    ></app-file-upload>
+  </div>
 
-
-  <div class="card" style="width: 18rem;">
-    <img [src]="photoUrl" class="card-img-top" >
-    <!-- https://i0.wp.com/digitalhealthskills.com/wp-content/uploads/2022/11/3da39-no-user-image-icon-27.png -->
-    <div class="card-body">
- 
-  <h5 class="card-title">{{displayName || "Vous n\'avez pas entré votre nom"}}</h5>
-     
-    </div>
-    <ul class="list-group list-group-flush">
-      <li class="list-group-item">Email:  {{email}}</li>
-      <li class="list-group-item">Phone: {{phoneNumber || 'n\'existe pas'}}</li>
-      <!-- <li class="list-group-item">A third item</li> -->
-    </ul>
-    <div class="card-body">
-      <!-- <a href="#" class="card-link">Card link</a>
-      <a href="#" class="card-link">Another link</a> -->
+  <div class="card-body">
+    <h5 class="card-title">
+      <div class="row">
+        <div class="col-8">
+          <span [class]="isDisplayName ? 'd-none' : 'inline'">{{
+            displayName || "Aucun nom"
+          }}</span>
+          <input
+            [(ngModel)]="displayName"
+            [class]="isDisplayName ? 'form-control' : 'd-none'"
+            placeholder="Entrez votre nom d'utililsateur"
+          />
+        </div>
+        <div class="col-4">
+          <button
+            class="btn btn-outline-danger btn-sm m-2"
+            (click)="
+              isDisplayName ? saveDisplayName() : triggerDisplayNameInput()
+            "
+          >
+            {{ isDisplayName ? "Envoyer" : "Editer" }}
+          </button>
+        </div>
+      </div>
+    </h5>
+  </div>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item">Email: {{ email }}</li>
+    <!-- 
+    <li class="list-group-item">
+      <div class="row">
+        <div class="col-3">
+          <span>Phone:</span>
+        </div>
+        <div class="col-6">
+          <span [class]="isEditPhone ? 'd-none' : 'inline'">{{
+            phoneNumber || "n'existe pas"
+          }}</span
+          ><input
+            #telEdit
+            type="tel"
+            [style.display]="isEditPhone ? 'inline' : 'none'"
+            [(ngModel)]="phoneNumber"
+            placeholder="votre numéro de téléphone"
+            class="form-control"
+          />
+        </div>
+        <div class="col-3">
+          <button
+            class="btn btn-outline-danger btn-sm"
+            (click)="isEditPhone ? savePhoneDetails() : triggerPhoneInput()"
+          >
+            {{ isEditPhone ? "Envoye" : "Editer" }}
+          </button>
+        </div>
+      </div>
+    </li> -->
+    <!-- <li class="list-group-item">A third item  (input)="savePhoneDetails($event)"</li> -->
+  </ul>
+  <div class="card-body">
+    <div class="row">
+      <div class="form-check form-switch">
+        <input
+          class="form-check-input"
+          type="checkbox"
+          id="password"
+          [(ngModel)]="isPassword"
+        />
+        <label class="form-check-label" for="password"
+          >Veulez vous changer mot de pass?</label
+        >
+      </div>
+      <div [class]="isPassword ? 'row' : 'd-none'">
+        <div class="row mb-2">
+          <input
+            type="password"
+            [(ngModel)]="oldPassword"
+            [class]="'form-control'"
+            placeholder="vieux mot de pass"
+          />
+        </div>
+        <div class="row mb-2">
+          <input
+            type="password"
+            [(ngModel)]="newPassword"
+            [class]="'form-control'"
+            placeholder="nouveau mot de pass"
+          />
+        </div>
+        <div class="row">
+          <button
+            class="btn btn-outline-success btn-sm"
+            (click)="updatePassword()"
+          >
+            Envoyer
+          </button>
+        </div>
+      </div>
     </div>
   </div>
+</div>

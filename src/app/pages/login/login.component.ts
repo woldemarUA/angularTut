@@ -5,7 +5,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { AuthService } from '../../service/auth.service';
-import { response } from 'express';
+import { ToastService } from '../../service/toast.service';
 
 @Component({
   selector: 'app-login',
@@ -22,22 +22,27 @@ export class LoginComponent implements OnInit {
     private formBuilder: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private toastService: ToastService
   ) {}
 
   async login() {
     try {
-      this.authService
-        .login(this.authForm.value.email, this.authForm.value.password)
-        .then((response) => {
-          if (!response) console.log('Login failed');
-          this.router.navigate(['/home/profile']);
-        });
+      const response = await this.authService.login(
+        this.authForm.value.email,
+        this.authForm.value.password
+      );
+      if (!response) console.log('Login failed');
+      this.router.navigate(['/home/profile']);
+      this.toastService.showSuccess('Vous etez connecté avec success');
     } catch (err: any) {
       const errorCode = err.code;
       const errorMessage = err.message;
-      console.log(errorCode);
-      console.log(errorMessage);
+      if (err.code === 'auth/invalid-credential')
+        return this.toastService.showFailrue(
+          " mot de passe ou nom d'utilisateur erroné"
+        );
+      this.toastService.showFailrue(errorMessage);
     }
   }
   async loginWithGoogle() {
@@ -45,21 +50,25 @@ export class LoginComponent implements OnInit {
       this.authService.loginWithGoogle().then((response) => {
         if (!response) console.log('Login with gooogle failed');
         this.router.navigate(['home/profile']);
+        this.toastService.showSuccess('Vous etez connecté avec success');
       });
     } catch (err) {
-      console.error(err);
+      this.toastService.showFailrue(err);
     }
   }
 
   async register() {
     try {
-      this.authService
-        .register(this.authForm.value.email, this.authForm.value.password)
-        .then((result) => {
-          console.log(result);
-        });
+      await this.authService.register(
+        this.authForm.value.email,
+        this.authForm.value.password
+      );
+      this.toastService.showSuccess(
+        'Vous etez registré avec success. Vous pouvez vous connecter'
+      );
+      this.router.navigate(['/auth/login']);
     } catch (err) {
-      console.error(err);
+      this.toastService.showFailrue(err);
     }
   }
 
