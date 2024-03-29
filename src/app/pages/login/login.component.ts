@@ -1,7 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  FormsModule,
+} from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { AuthService } from '../../service/auth.service';
@@ -10,13 +15,15 @@ import { ToastService } from '../../service/toast.service';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, FormsModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
 })
 export class LoginComponent implements OnInit {
   authForm: FormGroup;
+  restorePassword: FormGroup;
   isLogin: boolean = false;
+  isPassword: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -72,6 +79,21 @@ export class LoginComponent implements OnInit {
     }
   }
 
+  async passwordReset() {
+    try {
+      const email = this.restorePassword.get('resendPassword').value;
+      await this.authService.resetPassword(email);
+
+      this.toastService.showSuccess(
+        'Si un compte avec cette adresse e-mail existe, un lien de réinitialisation du mot de passe a été envoyé.'
+      );
+      this.isPassword = false;
+    } catch (err) {
+      console.error(err);
+      this.toastService.showFailrue('Erreur');
+    }
+  }
+
   ngOnInit(): void {
     this.activatedRoute.url.subscribe((url) => {
       const path = url[0].path;
@@ -80,6 +102,9 @@ export class LoginComponent implements OnInit {
     this.authForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
+    });
+    this.restorePassword = this.formBuilder.group({
+      resendPassword: ['', [Validators.required, Validators.email]],
     });
   }
 }

@@ -1,1 +1,13 @@
-<p>camera-container works!</p>
+<!-- camera-capture.component.html -->
+<video #video autoplay></video>
+<button
+  (click)="isCanvas ? capture() : toggleCanvas()"
+  [attr.aria-label]="isCanvas ? 'Reprendre' : 'Faire une photo'"
+  class="btn"
+>
+  <!-- {{ isCanvas ? "reprend" : "faire une photo" }} -->
+  <i class="bi bi-camera"></i>
+  <span class="px-2">{{ isCanvas ? "Reprend" : "Faire une photo" }} </span>
+</button>
+
+<canvas #canvas [class]="isCanvas ? '' : 'd-none'"></canvas>

@@ -14,6 +14,5 @@ export class ToastContainerComponent {
   constructor(public toastService: ToastService) {}
   showToast(text: string, options: ToastOptions) {
     this.toastService.show(text, options);
-    console.log(`toast component   ${text}`);
   }
 }

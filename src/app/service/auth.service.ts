@@ -10,6 +10,7 @@ import {
   reauthenticateWithCredential,
   EmailAuthProvider,
   updatePassword,
+  sendPasswordResetEmail,
   // updatePhoneNumber,
 } from '@angular/fire/auth';
 
@@ -86,6 +87,14 @@ export class AuthService {
     } catch (err) {
       //   // Assuming displayError is a method that displays the error message to the user
       // this.displayError('Login failed. Please check your email and password.');
+      throw err;
+    }
+  }
+  async resetPassword(email: string) {
+    try {
+      await sendPasswordResetEmail(this.auth, email);
+    } catch (err) {
+      console.log(err);
       throw err;
     }
   }

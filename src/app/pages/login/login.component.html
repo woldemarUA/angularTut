@@ -1,35 +1,119 @@
 <div class="container">
-    <form [formGroup]="authForm" (ngSubmit)="isLogin?login():register()" >
-
-      <div class ="form-floating mb-1">
-        <input id="email" class="form-control "  formControlName="email" type="email"/>
-        <label for="email">Votre email</label>
-        <div *ngIf="authForm.controls['email'].invalid && authForm.controls['email'].touched">
-        
-            <small class="error " *ngIf="authForm.get('email')?.errors?.['required']">Email is required.</small>
-            <small class="error" *ngIf="authForm.get('email')?.errors?.['email']">Please enter a valid email address.</small>
-        </div>
-    
+  <form [formGroup]="authForm" (ngSubmit)="isLogin ? login() : register()">
+    <div class="form-floating mb-1">
+      <input
+        id="email"
+        class="form-control"
+        formControlName="email"
+        type="email"
+      />
+      <label for="email">Votre email</label>
+      <div
+        *ngIf="
+          authForm.controls['email'].invalid &&
+          authForm.controls['email'].touched
+        "
+      >
+        <small class="error" *ngIf="authForm.get('email')?.errors?.['required']"
+          >Email is required.</small
+        >
+        <small class="error" *ngIf="authForm.get('email')?.errors?.['email']"
+          >Please enter a valid email address.</small
+        >
       </div>
+    </div>
 
-     <div class="form-floating mb-1">
-        <input id="password" class="form-control "  formControlName="password" type="password"/>
-        <label for="password">Votre mot de pass</label>
-          <div *ngIf="authForm.controls['password'].invalid && authForm.controls['password'].touched">
-            <small class="error " *ngIf="authForm.get('password')?.errors?.['required']">password is required.</small>
-            <small class="error" *ngIf="authForm.get('password')?.errors?.['password']">Please enter a valid password .</small>
-        </div>
-     </div>
-    
-      <button class="btn btn-primary btn-sm" type="submit" [disabled]="!authForm.valid">{{isLogin?'Se connecter':'S\'inscrire'}}</button>
+    <div class="form-floating mb-1">
+      <input
+        id="password"
+        class="form-control"
+        formControlName="password"
+        type="password"
+      />
+      <label for="password">Votre mot de pass</label>
+      <div
+        *ngIf="
+          authForm.controls['password'].invalid &&
+          authForm.controls['password'].touched
+        "
+      >
+        <small
+          class="error"
+          *ngIf="authForm.get('password')?.errors?.['required']"
+          >password is required.</small
+        >
+        <small
+          class="error"
+          *ngIf="authForm.get('password')?.errors?.['password']"
+          >Please enter a valid password .</small
+        >
+      </div>
+    </div>
+
+    <button
+      class="btn btn-primary btn-sm"
+      type="submit"
+      [disabled]="!authForm.valid"
+    >
+      {{ isLogin ? "Se connecter" : "S'inscrire" }}
+    </button>
+  </form>
+  <div class="row">
+    <div class="form-check form-switch">
+      <input
+        class="form-check-input"
+        type="checkbox"
+        id="password"
+        [(ngModel)]="isPassword"
+      />
+      <label class="form-check-label" for="password"
+        >Veulez vous changer mot de pass?</label
+      >
+    </div>
+  </div>
+  <div [class]="isPassword ? 'row' : 'd-none'">
+    <form
+      [formGroup]="restorePassword"
+      (submit)="passwordReset(); $event.preventDefault()"
+    >
+      <div class="col-8">
+        <input
+          type="email"
+          class="form-control"
+          formControlName="resendPassword"
+        />
+      </div>
+      <div
+        *ngIf="
+          restorePassword.controls['resendPassword'].invalid &&
+          restorePassword.controls['resendPassword'].touched
+        "
+      >
+        <small
+          class="error"
+          *ngIf="restorePassword.get('resendPassword')?.errors?.['required']"
+          >Email is required.</small
+        >
+        <small
+          class="error"
+          *ngIf="restorePassword.get('resendPassword')?.errors?.['email']"
+          >Please enter a valid email address.</small
+        >
+      </div>
+      <div class="col-4 my-auto">
+        <button
+          type="submit"
+          class="btn btn-outline-warning btn-sm"
+          [disabled]="!restorePassword.valid"
+        >
+          changer
+        </button>
+      </div>
     </form>
-<div class="my-2">
-
-  <button (click)="loginWithGoogle()" class="btn btn-success btn-sm">Sign in with Google</button>
-
+  </div>
+  <div class="my-2">
+    <button (click)="loginWithGoogle()" class="btn btn-success btn-sm">
+      Sign in with Google
+    </button>
+  </div>
 </div>
-
- 
-</div>
-  
-

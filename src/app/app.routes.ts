@@ -6,11 +6,13 @@ import { HomeComponent } from './pages/home/home.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { canActivateAuth } from './service/canActivateAuth';
 import { WelcomeComponent } from './pages/welcome/welcome.component';
+import { CameraContainerComponent } from './pages/camera-container/camera-container.component';
 
 export const routes: Routes = [
   {
     path: '',
     component: WelcomeComponent,
+    children: [{ path: 'camera', component: CameraContainerComponent }],
   },
 
   {
