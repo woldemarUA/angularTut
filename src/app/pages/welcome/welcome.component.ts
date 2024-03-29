@@ -1,18 +1,29 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { AuthService } from '../../service/auth.service';
-import { ToastContainerComponent } from '../toast-container/toast-container.component';
 import { RouterOutlet } from '@angular/router';
+
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+
+import { CameraContainerComponent } from '../camera-container/camera-container.component';
+
 @Component({
   selector: 'app-welcome',
   standalone: true,
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, CameraContainerComponent],
   templateUrl: './welcome.component.html',
   styleUrl: './welcome.component.css',
 })
 export class WelcomeComponent implements OnInit {
   username: string;
+  modalRef?: BsModalRef;
+  constructor(
+    private authService: AuthService,
+    private modalService: BsModalService
+  ) {}
 
-  constructor(private authService: AuthService) {}
+  openModal(template: TemplateRef<void>) {
+    this.modalRef = this.modalService.show(template);
+  }
   ngOnInit(): void {
     this.authService.user$.subscribe((user) => {
       if (user) {

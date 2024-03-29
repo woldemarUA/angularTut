@@ -1,13 +1,30 @@
 <!-- camera-capture.component.html -->
-<video #video autoplay></video>
-<button
-  (click)="isCanvas ? capture() : toggleCanvas()"
-  [attr.aria-label]="isCanvas ? 'Reprendre' : 'Faire une photo'"
-  class="btn"
->
-  <!-- {{ isCanvas ? "reprend" : "faire une photo" }} -->
-  <i class="bi bi-camera"></i>
-  <span class="px-2">{{ isCanvas ? "Reprend" : "Faire une photo" }} </span>
-</button>
-
-<canvas #canvas [class]="isCanvas ? '' : 'd-none'"></canvas>
+<div class="video-wrapper">
+  <video #video autoplay></video>
+</div>
+<div class="row">
+  <div class="col">
+    <button
+      (click)="isCanvas ? capture() : toggleCanvas()"
+      [attr.aria-label]="isCanvas ? 'Reprendre' : 'Faire une photo'"
+      class="btn btn-outline-secondary btn-sm my-1"
+    >
+      <i class="bi bi-camera"></i>
+      <span class="px-2">{{ isCanvas ? "Reprend" : "Faire une photo" }} </span>
+    </button>
+  </div>
+  <div class="col">
+    <button
+      (click)="savePhoto()"
+      [attr.aria-label]="'Telecharger'"
+      [class]="
+        isUpload ? 'btn btn-outline-secondary btn-sm my-1 mx-auto' : 'd-none'
+      "
+    >
+      <span class="px-2">Telecharger</span><i class="bi bi-cloud-arrow-up"></i>
+    </button>
+  </div>
+</div>
+<div class="canvas-wrapper">
+  <canvas #canvas [class]="isCanvas ? '' : 'd-none'"></canvas>
+</div>

@@ -8,7 +8,7 @@ import { ToastOptions } from '../../interface/toast-options';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './toast-container.component.html',
-  styleUrl: './toast-container.component.css',
+  styleUrls: ['./toast-container.component.css'],
 })
 export class ToastContainerComponent {
   constructor(public toastService: ToastService) {}

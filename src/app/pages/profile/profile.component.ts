@@ -1,4 +1,10 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  ElementRef,
+  TemplateRef,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../service/auth.service';
 import { FileUploadComponent } from '../file-upload/file-upload.component';
@@ -6,12 +12,20 @@ import { StorageService } from '../../service/storage.service';
 import { UtilitiesService } from '../../service/utilities.service';
 import { ToastService } from '../../service/toast.service';
 
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+
 import { ToastContainerComponent } from '../toast-container/toast-container.component';
+import { CameraContainerComponent } from '../camera-container/camera-container.component';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [FileUploadComponent, FormsModule, ToastContainerComponent],
+  imports: [
+    FileUploadComponent,
+    FormsModule,
+    ToastContainerComponent,
+    CameraContainerComponent,
+  ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css',
 })
@@ -19,6 +33,9 @@ export class ProfileComponent implements OnInit {
   @ViewChild('fileUpload') fileUploadComponent: FileUploadComponent;
   @ViewChild('displayName') displayNameInput: ElementRef;
   @ViewChild('password') passwordInput: ElementRef;
+
+  modalRef?: BsModalRef;
+
   isDisplayName: boolean = false;
   isPassword: boolean = false;
   displayName: string = null;
@@ -32,13 +49,26 @@ export class ProfileComponent implements OnInit {
     private authService: AuthService,
     private storageService: StorageService,
     private utilities: UtilitiesService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private modalService: BsModalService
   ) {}
   triggerFileInputClick() {
     this.fileUploadComponent.openFileDialog();
   }
   triggerDisplayNameInput() {
     this.isDisplayName = !this.isDisplayName;
+  }
+
+  openCamera(cameraModal: TemplateRef<void>) {
+    this.modalRef = this.modalService.show(cameraModal);
+  }
+  closeCamera() {
+    if (!this.modalRef) {
+      return;
+    }
+
+    this.modalRef.hide();
+    this.modalRef = null;
   }
 
   async saveDisplayName() {
@@ -57,9 +87,22 @@ export class ProfileComponent implements OnInit {
   }
 
   async updateProfilePhoto(file: File) {
-    const fileName: string = this.utilities.generateFileName('user-pic');
-    const link = await this.storageService.uploadFile(file, fileName);
-    const result = await this.authService.updateUserProfile({ photoURL: link });
+    try {
+      const fileName: string = this.utilities.generateFileName('user-pic');
+      const link = await this.storageService.uploadFile(file, fileName);
+      const result = await this.authService.updateUserProfile({
+        photoURL: link,
+      });
+
+      this.toastService.showSuccess('Votre foto etait changé avec success');
+      this.closeCamera();
+    } catch (err) {
+      console.error(err);
+      this.toastService.showFailrue(
+        "Votre foto n'etait changé.Essayez vous encore une fois"
+      );
+      this.closeCamera();
+    }
   }
 
   async updatePassword() {

@@ -2,12 +2,44 @@
 <div class="card">
   <div class="border mb-2">
     <img [src]="photoUrl" class="card-img-top" />
-    <button
-      class="btn btn-outline-danger btn-sm"
-      (click)="triggerFileInputClick()"
-    >
-      Editer
-    </button>
+    <div class="row my-1 mx-auto">
+      <div class="col">
+        <button
+          class="btn btn-outline-danger btn-sm"
+          (click)="triggerFileInputClick()"
+        >
+          Telecharher foto
+        </button>
+      </div>
+      <div class="col">
+        <button
+          type="button"
+          class="btn btn-outline-secondary btn-sm mx-2"
+          (click)="openCamera(cameraModal)"
+        >
+          <i class="bi bi-camera"></i>
+        </button>
+      </div>
+    </div>
+
+    <ng-template #cameraModal>
+      <div class="modal-header">
+        <h4 class="modal-title pull-left">Modal</h4>
+        <button
+          type="button"
+          class="btn-close close pull-right"
+          aria-label="Close"
+          (click)="closeCamera()"
+        >
+          <span aria-hidden="true" class="visually-hidden">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <app-camera-container
+          (fileCaptured)="updateProfilePhoto($event)"
+        ></app-camera-container>
+      </div>
+    </ng-template>
     <app-file-upload
       #fileUpload
       style="display: none"

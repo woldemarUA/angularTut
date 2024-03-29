@@ -1,0 +1,17 @@
+/* camera-container.component.css */
+.video-wrapper, .canvas-wrapper {
+    position: relative;
+    width: 100%; /* Responsive width */
+    /* Set a height or padding-top for aspect ratio, e.g., 56.25% for 16:9 */
+    padding-top: 56.25%;
+  }
+  
+  video, canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Only works on <video>, not <canvas> */
+  }
+  

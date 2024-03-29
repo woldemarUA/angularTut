@@ -14,11 +14,13 @@ import { routes } from './app.routes';
 import { provideClientHydration } from '@angular/platform-browser';
 import { getAuth, provideAuth } from '@angular/fire/auth';
 
+import { BsModalService } from 'ngx-bootstrap/modal';
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes, withComponentInputBinding()),
     provideClientHydration(),
-
+    BsModalService,
     importProvidersFrom([
       provideFirebaseApp(() => initializeApp(firebaseConfig)),
       provideFirestore(() => getFirestore()),
